@@ -1,2 +1,3 @@
-# sentiment-analysis-data-pipeline
-I will create a data pipeline retrieving certain tweets on twitter, perform sentiment analysis on it and sending it to wherever it needs to go via HTTP request. I will make use of docker in order to put structure in form of several microservices.
+# Sentiment Analysis - Data Pipeline
+
+### Goal of this project is to extract tweets from twitter related to Elon Musk with with words that are in relation to cryptocurrencies and perform sentiment analysis on it and 

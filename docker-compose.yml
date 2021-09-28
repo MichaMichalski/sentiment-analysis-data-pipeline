@@ -1,0 +1,50 @@
+version: '3.4'
+services: # list the containers we want to create
+    tweet_collector:  #run container with this name
+        build: get_tweets_dir/
+        depends_on: #specify dependencies .e.g. for starting order
+        - mongodb
+    mongodb:
+        image: mongo
+        ports:
+        - 27017:27017
+        command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "27017"]
+        healthcheck:
+            test: test $$(echo "rs.initiate({_id:'my-replica-set',members:[{_id:0,host:\"mongodb:27017\",priority:2},{_id:1,host:\"mongodb1:27017\",priority:0},{_id:2,host:\"mongodb2:27017\",priority:0}]}).ok || rs.status().ok" | mongo --port 27017 --quiet) -eq 1
+            interval: 10s
+            start_period: 1s
+        depends_on: 
+        - mongodb1
+        - mongodb2
+    mongodb1:
+        image: mongo
+        ports:
+        - 27018:27017
+        command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "27017"]
+    mongodb2:
+        image: mongo
+        ports:
+        - 27019:27017
+        command: ["--replSet", "my-replica-set", "--bind_ip_all", "--port", "27017"]
+    mypg:
+        image: postgres
+        ports:
+        - 5555:5432
+        environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=1234
+    myetl:
+        build: etl_dir/
+        depends_on:
+        - mongodb
+        - mypg
+    listener:
+        build: pglistener_dir/
+        depends_on:
+        - mypg
+    notifier:
+        build: pgnotifier_dir/
+        depends_on:
+        - listener
+        
+        
