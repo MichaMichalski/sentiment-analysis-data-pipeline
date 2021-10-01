@@ -6,7 +6,7 @@ Goal of this project is to extract tweets from twitter related to Elon Musk with
 
 - Docker/ docker-compose
 
-(This is the placeholder for a chart describing the infrastructure)
+![Architecture](https://github.com/MichaMichalski/sentiment-analysis-data-pipeline/raw/main/pics/Architecture_Sentiment_Analysis.png "Architecture")
 
 #### 1. Tweet stream
 
